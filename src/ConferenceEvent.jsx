@@ -42,7 +42,15 @@ const ConferenceEvent = () => {
     };
 
     const handleMealSelection = (index) => {
-       
+        const item = mealsItems[index];
+        if (item.selected && item.type === "mealForPeople") {
+            // Ensure numberOfPeople is set before toggling selection
+            const newNumberOfPeople = item.selected ? numberOfPeople : 0;
+            dispatch(toggleMealSelection(index, newNumberOfPeople));
+        }
+        else {
+            dispatch(toggleMealSelection(index));
+        }
     };
 
     const getItemsFromTotalCost = () => {
@@ -212,20 +220,18 @@ const ConferenceEvent = () => {
                                     />
                                 </div>
                                 <div className="meal_selection">
-                                <div className="meal_selection">
-    {mealsItems.map((item, index) => (
-        <div className="meal_item" key={index} style={{ padding: 15 }}>
-            <div className="inner">
-                <input type="checkbox" id={ `meal_${index}` }
-                    checked={ item.selected }
-                    onChange={() => handleMealSelection(index)}
-                 />
-                <label htmlFor={`meal_${index}`}> {item.name} </label>
-            </div>
-            <div className="meal_cost">${item.cost}</div>
-        </div>
-    ))}
-</div>
+                                    {mealsItems.map((item, index) => (
+                                        <div className="meal_item" key={index} style={{ padding: 15 }}>
+                                            <div className="inner">
+                                                <input type="checkbox" id={ `meal_${index}` }
+                                                    checked={ item.selected }
+                                                    onChange={() => handleMealSelection(index)}
+                                                />
+                                                <label htmlFor={`meal_${index}`}> {item.name} </label>
+                                            </div>
+                                            <div className="meal_cost">${item.cost}</div>
+                                        </div>
+                                    ))}
                                 </div>
                                 <div className="total_cost">Total Cost: ${mealsTotalCost}</div>
 
@@ -249,4 +255,3 @@ const ConferenceEvent = () => {
 };
 
 export default ConferenceEvent;
-
